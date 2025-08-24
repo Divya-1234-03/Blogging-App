@@ -1,0 +1,1284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ReactBlog - Your Blogging Platform</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary-color: #4285f4;
+            --secondary-color: #34a853;
+            --accent-color: #ea4335;
+            --light-color: #f8f9fa;
+            --dark-color: #202124;
+            --gray-color: #5f6368;
+            --border-color: #dadce0;
+            --shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        body {
+            background-color: #f5f5f5;
+            color: var(--dark-color);
+            line-height: 1.6;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+
+        /* Header Styles */
+        header {
+            background-color: white;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 22px;
+            font-weight: 600;
+            color: var(--primary-color);
+            cursor: pointer;
+        }
+
+        .logo i {
+            margin-right: 10px;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+
+        nav ul li {
+            margin-left: 20px;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: var(--gray-color);
+            font-weight: 500;
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        nav ul li a:hover, nav ul li a.active {
+            color: var(--primary-color);
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #3367d6;
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            border: 1px solid var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        .btn-outline:hover {
+            background-color: rgba(66, 133, 244, 0.1);
+        }
+
+        .btn-danger {
+            background-color: var(--accent-color);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background-color: #d93025;
+        }
+
+        /* Main Content Styles */
+        .main-content {
+            padding: 30px 0;
+            min-height: calc(100vh - 180px);
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #4285f4 0%, #34a853 100%);
+            color: white;
+            padding: 60px 0;
+            text-align: center;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto 25px;
+        }
+
+        /* Dashboard */
+        .dashboard {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background-color: var(--light-color);
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .stat-card i {
+            font-size: 2rem;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+
+        .stat-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+        }
+
+        /* Page Sections */
+        .page-section {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+
+        .page-section h2 {
+            margin-bottom: 20px;
+            color: var(--primary-color);
+        }
+
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .category-card {
+            background-color: var(--light-color);
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .category-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow);
+        }
+
+        .category-card i {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+
+        /* Search and Filter */
+        .search-filter {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 30px;
+            align-items: center;
+        }
+
+        .search-box {
+            flex: 1;
+            min-width: 250px;
+            position: relative;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 12px 15px 12px 40px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray-color);
+        }
+
+        .filter-box {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 8px 16px;
+            background-color: white;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .filter-btn.active {
+            background-color: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        /* Blog List */
+        .blog-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .blog-card {
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+
+        .blog-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .blog-image {
+            height: 180px;
+            overflow: hidden;
+        }
+
+        .blog-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--transition);
+        }
+
+        .blog-card:hover .blog-image img {
+            transform: scale(1.05);
+        }
+
+        .blog-content {
+            padding: 20px;
+        }
+
+        .blog-title {
+            font-size: 1.25rem;
+            margin-bottom: 10px;
+            color: var(--dark-color);
+        }
+
+        .blog-excerpt {
+            color: var(--gray-color);
+            margin-bottom: 15px;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .blog-meta {
+            display: flex;
+            justify-content: space-between;
+            color: var(--gray-color);
+            font-size: 0.9rem;
+        }
+
+        .blog-tags {
+            display: flex;
+            gap: 5px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+
+        .tag {
+            background-color: rgba(66, 133, 244, 0.1);
+            color: var(--primary-color);
+            padding: 3px 8px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+        }
+
+        .blog-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        /* Pagination */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 30px;
+        }
+
+        .page-btn {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            border: 1px solid var(--border-color);
+            background-color: white;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .page-btn.active {
+            background-color: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        /* Forms */
+        .form-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+        }
+
+        .form-title {
+            text-align: center;
+            margin-bottom: 30px;
+            color: var(--dark-color);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-size: 16px;
+            transition: var(--transition);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(66, 133, 244, 0.2);
+        }
+
+        textarea.form-control {
+            min-height: 200px;
+            resize: vertical;
+        }
+
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        /* Auth Forms */
+        .auth-container {
+            max-width: 400px;
+            margin: 40px auto;
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+        }
+
+        /* Footer */
+        footer {
+            background-color: white;
+            padding: 30px 0;
+            border-top: 1px solid var(--border-color);
+            margin-top: 40px;
+        }
+
+        .footer-content {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 30px;
+        }
+
+        .footer-section {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .footer-section h3 {
+            margin-bottom: 15px;
+            color: var(--dark-color);
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 10px;
+        }
+
+        .footer-section ul li a {
+            text-decoration: none;
+            color: var(--gray-color);
+            transition: var(--transition);
+        }
+
+        .footer-section ul li a:hover {
+            color: var(--primary-color);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .social-links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: #f5f5f5;
+            color: var(--gray-color);
+            transition: var(--transition);
+        }
+
+        .social-links a:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .copyright {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+            color: var(--gray-color);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            nav ul {
+                margin: 15px 0;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            nav ul li {
+                margin: 5px 10px;
+            }
+            
+            .auth-buttons {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .hero p {
+                font-size: 1rem;
+            }
+            
+            .blog-list {
+                grid-template-columns: 1fr;
+            }
+            
+            .search-filter {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .filter-box {
+                justify-content: center;
+            }
+            
+            .dashboard-header {
+                flex-direction: column;
+                gap: 15px;
+                align-items: flex-start;
+            }
+            
+            .category-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Utility Classes */
+        .hidden {
+            display: none;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .mt-20 {
+            margin-top: 20px;
+        }
+
+        .mb-20 {
+            margin-bottom: 20px;
+        }
+
+        /* Animation */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo" id="homeBtn">
+                    <i class="fas fa-blog"></i>
+                    <span>ReactBlog</span>
+                </div>
+                <nav>
+                    <ul>
+                        <li><a href="#" class="active" data-page="home">Home</a></li>
+                        <li><a href="#" data-page="discover">Discover</a></li>
+                        <li><a href="#" data-page="categories">Categories</a></li>
+                        <li><a href="#" data-page="about">About</a></li>
+                    </ul>
+                </nav>
+                <div class="auth-buttons">
+                    <button class="btn btn-outline" id="loginBtn">Sign In</button>
+                    <button class="btn btn-primary" id="signupBtn">Sign Up</button>
+                    <button class="btn btn-primary hidden" id="createBtn">Create Post</button>
+                    <button class="btn btn-outline hidden" id="logoutBtn">Logout</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container main-content" id="mainContent">
+        <!-- Hero Section -->
+        <section class="hero">
+            <h1>Share Your Story With The World</h1>
+            <p>ReactBlog is a clean, modern publishing platform designed for writers and bloggers to share their ideas and connect with readers.</p>
+            <button class="btn btn-primary" id="heroCreateBtn">Start Writing</button>
+        </section>
+
+        <!-- Search and Filter -->
+        <div class="search-filter">
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="Search blogs by title or tags...">
+            </div>
+            <div class="filter-box">
+                <button class="filter-btn active">All</button>
+                <button class="filter-btn">Tech</button>
+                <button class="filter-btn">Lifestyle</button>
+                <button class="filter-btn">News</button>
+                <button class="filter-btn">Travel</button>
+                <button class="filter-btn">Food</button>
+            </div>
+        </div>
+
+        <!-- Blog List -->
+        <div class="blog-list">
+            <!-- Blog posts will be loaded here -->
+        </div>
+
+        <!-- Pagination -->
+        <div class="pagination">
+            <button class="page-btn"><i class="fas fa-chevron-left"></i></button>
+            <button class="page-btn active">1</button>
+            <button class="page-btn">2</button>
+            <button class="page-btn">3</button>
+            <button class="page-btn">4</button>
+            <button class="page-btn"><i class="fas fa-chevron-right"></i></button>
+        </div>
+    </div>
+
+    <!-- Discover Page (Initially Hidden) -->
+    <div class="container main-content hidden" id="discoverPage">
+        <div class="page-section">
+            <h2>Discover Trending Content</h2>
+            <p>Explore the most popular and trending blog posts from our community of writers.</p>
+            
+            <div class="search-filter">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Search trending content...">
+                </div>
+                <div class="filter-box">
+                    <button class="filter-btn active">This Week</button>
+                    <button class="filter-btn">This Month</button>
+                    <button class="filter-btn">All Time</button>
+                </div>
+            </div>
+            
+            <div class="blog-list">
+                <!-- Trending blog posts will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Categories Page (Initially Hidden) -->
+    <div class="container main-content hidden" id="categoriesPage">
+        <div class="page-section">
+            <h2>Browse by Category</2>
+            <p>Explore blog posts by category to find content that interests you most.</p>
+            
+            <div class="category-grid">
+                <div class="category-card">
+                    <i class="fas fa-laptop-code"></i>
+                    <h3>Technology</h3>
+                    <p>Latest in tech, programming, and digital innovation</p>
+                </div>
+                <div class="category-card">
+                    <i class="fas fa-heart"></i>
+                    <h3>Lifestyle</h3>
+                    <p>Health, wellness, and daily living</p>
+                </div>
+                <div class="category-card">
+                    <i class="fas fa-newspaper"></i>
+                    <h3>News</h3>
+                    <p>Current events and breaking news</p>
+                </div>
+                <div class="category-card">
+                    <i class="fas fa-plane"></i>
+                    <h3>Travel</h3>
+                    <p>Destinations, tips, and adventures</p>
+                </div>
+                <div class="category-card">
+                    <i class="fas fa-utensils"></i>
+                    <h3>Food</h3>
+                    <p>Recipes, restaurants, and culinary experiences</p>
+                </div>
+                <div class="category-card">
+                    <i class="fas fa-dumbbell"></i>
+                    <h3>Fitness</h3>
+                    <p>Workout routines and health tips</p>
+                </div>
+            </div>
+            
+            <h3 class="mt-20">Popular in Technology</h3>
+            <div class="blog-list">
+                <!-- Technology blog posts will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- About Page (Initially Hidden) -->
+    <div class="container main-content hidden" id="aboutPage">
+        <div class="page-section">
+            <h2>About ReactBlog</h2>
+            <p>ReactBlog is a modern publishing platform created for writers and bloggers to share their ideas with the world.</p>
+            
+            <div class="page-section" style="background-color: var(--light-color);">
+                <h3>Our Mission</h3>
+                <p>Our mission is to provide a clean, intuitive platform for writers to express their ideas and for readers to discover valuable content. We believe in the power of storytelling and the sharing of knowledge.</p>
+            </div>
+            
+            <div class="page-section" style="background-color: white;">
+                <h3>Our Team</h3>
+                <p>We're a small team of developers and content creators passionate about building tools that empower writers. Our team comes from diverse backgrounds but shares a common love for great content.</p>
+            </div>
+            
+            <div class="page-section" style="background-color: var(--light-color);">
+                <h3>Join Our Community</h3>
+                <p>Whether you're a writer looking to share your ideas or a reader looking for valuable content, we welcome you to join our growing community. Together, we can create a platform that celebrates great writing.</p>
+                <button class="btn btn-primary mt-20">Sign Up Now</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dashboard (Initially Hidden) -->
+    <div class="container main-content hidden" id="dashboard">
+        <div class="dashboard">
+            <div class="dashboard-header">
+                <h2>Your Dashboard</h2>
+                <button class="btn btn-primary" id="dashboardCreateBtn">Create New Post</button>
+            </div>
+            
+            <div class="stats">
+                <div class="stat-card">
+                    <i class="fas fa-file-alt"></i>
+                    <h3>12</h3>
+                    <p>Total Posts</p>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-eye"></i>
+                    <h3>3,458</h3>
+                    <p>Total Views</p>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-comments"></i>
+                    <h3>127</h3>
+                    <p>Total Comments</p>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-share-alt"></i>
+                    <h3>89</h3>
+                    <p>Total Shares</p>
+                </div>
+            </div>
+            
+            <h3>Your Recent Posts</h3>
+            <div class="blog-list" id="userBlogs">
+                <!-- User's blog posts will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Create Blog Form (Initially Hidden) -->
+    <div class="container main-content hidden" id="createForm">
+        <div class="form-container">
+            <h2 class="form-title">Create New Blog Post</h2>
+            <form id="blogForm">
+                <div class="form-group">
+                    <label for="blogTitle">Title</label>
+                    <input type="text" id="blogTitle" class="form-control" placeholder="Enter blog title">
+                </div>
+                <div class="form-group">
+                    <label for="blogContent">Content</label>
+                    <textarea id="blogContent" class="form-control" placeholder="Write your blog content here..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="blogImage">Image URL</label>
+                    <input type="text" id="blogImage" class="form-control" placeholder="Paste image URL here">
+                </div>
+                <div class="form-group">
+                    <label for="blogCategory">Category</label>
+                    <select id="blogCategory" class="form-control">
+                        <option value="">Select a category</option>
+                        <option value="tech">Tech</option>
+                        <option value="lifestyle">Lifestyle</option>
+                        <option value="news">News</option>
+                        <option value="travel">Travel</option>
+                        <option value="food">Food</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="blogTags">Tags (comma separated)</label>
+                    <input type="text" id="blogTags" class="form-control" placeholder="e.g., React, JavaScript, Web Development">
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-outline" id="cancelCreate">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Publish</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Login Form (Initially Hidden) -->
+    <div class="container main-content hidden" id="loginForm">
+        <div class="auth-container">
+            <h2 class="form-title">Sign In to Your Account</h2>
+            <form id="loginFormElement">
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" class="form-control" placeholder="Enter your email">
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" class="form-control" placeholder="Enter your password">
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary" style="width: 100%;">Sign In</button>
+                </div>
+                <p class="text-center">Don't have an account? <a href="#" id="showSignup">Sign up</a></p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Signup Form (Initially Hidden) -->
+    <div class="container main-content hidden" id="signupForm">
+        <div class="auth-container">
+            <h2 class="form-title">Create Your Account</h2>
+            <form id="signupFormElement">
+                <div class="form-group">
+                    <label for="signupName">Full Name</label>
+                    <input type="text" id="signupName" class="form-control" placeholder="Enter your full name">
+                </div>
+                <div class="form-group">
+                    <label for="signupEmail">Email</label>
+                    <input type="email" id="signupEmail" class="form-control" placeholder="Enter your email">
+                </div>
+                <div class="form-group">
+                    <label for="signupPassword">Password</label>
+                    <input type="password" id="signupPassword" class="form-control" placeholder="Create a password">
+                </div>
+                <div class="form-group">
+                    <label for="confirmPassword">Confirm Password</label>
+                    <input type="password" id="confirmPassword" class="form-control" placeholder="Confirm your password">
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary" style="width: 100%;">Sign Up</button>
+                </div>
+                <p class="text-center">Already have an account? <a href="#" id="showLogin">Sign in</a></p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>ReactBlog</h3>
+                    <p>A modern publishing platform for writers and bloggers to share their ideas with the world.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="#" data-page="home">Home</a></li>
+                        <li><a href="#" data-page="discover">Discover</a></li>
+                        <li><a href="#" data-page="categories">Categories</a></li>
+                        <li><a href="#" data-page="about">About Us</a></li>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Categories</h3>
+                    <ul>
+                        <li><a href="#">Technology</a></li>
+                        <li><a href="#">Lifestyle</a></li>
+                        <li><a href="#">News</a></li>
+                        <li><a href="#">Travel</a></li>
+                        <li><a href="#">Food</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Contact Us</h3>
+                    <ul>
+                        <li><i class="fas fa-envelope"></i> contact@reactblog.com</li>
+                        <li><i class="fas fa-phone"></i> +1 (555) 123-4567</li>
+                        <li><i class="fas fa-map-marker-alt"></i> San Francisco, CA</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2023 ReactBlog. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // DOM Elements
+        const loginBtn = document.getElementById('loginBtn');
+        const signupBtn = document.getElementById('signupBtn');
+        const createBtn = document.getElementById('createBtn');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const showLogin = document.getElementById('showLogin');
+        const showSignup = document.getElementById('showSignup');
+        const heroCreateBtn = document.getElementById('heroCreateBtn');
+        const dashboardCreateBtn = document.getElementById('dashboardCreateBtn');
+        const cancelCreate = document.getElementById('cancelCreate');
+        const homeBtn = document.getElementById('homeBtn');
+        const mainContent = document.getElementById('mainContent');
+        const discoverPage = document.getElementById('discoverPage');
+        const categoriesPage = document.getElementById('categoriesPage');
+        const aboutPage = document.getElementById('aboutPage');
+        const dashboard = document.getElementById('dashboard');
+        const createForm = document.getElementById('createForm');
+        const loginForm = document.getElementById('loginForm');
+        const signupForm = document.getElementById('signupForm');
+        const blogForm = document.getElementById('blogForm');
+        const loginFormElement = document.getElementById('loginFormElement');
+        const signupFormElement = document.getElementById('signupFormElement');
+        const blogList = document.querySelector('.blog-list');
+        const userBlogs = document.getElementById('userBlogs');
+        const navLinks = document.querySelectorAll('nav a');
+        const footerLinks = document.querySelectorAll('footer a[data-page]');
+
+        // Sample blog data
+        const sampleBlogs = [
+            {
+                id: 1,
+                title: "Getting Started with React Hooks",
+                excerpt: "Learn how to use React Hooks to simplify your functional components and manage state more effectively in your applications.",
+                author: "John Doe",
+                date: "June 15, 2023",
+                tags: ["React", "JavaScript", "Web Development"],
+                image: "https://images.unsplash.com/photo-1499750310107-5fef28a66643?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80",
+                category: "tech"
+            },
+            {
+                id: 2,
+                title: "The Future of Web Development",
+                excerpt: "Exploring the latest trends and technologies that are shaping the future of web development and how you can stay ahead.",
+                author: "Jane Smith",
+                date: "June 10, 2023",
+                tags: ["Web Development", "Technology", "Future"],
+                image: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80",
+                category: "tech"
+            },
+            {
+                id: 3,
+                title: "Best Coding Practices for JavaScript",
+                excerpt: "Improve your JavaScript code quality with these essential best practices that every developer should follow.",
+                author: "Mike Johnson",
+                date: "June 5, 2023",
+                tags: ["JavaScript", "Coding", "Best Practices"],
+                image: "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1169&q=80",
+                category: "tech"
+            },
+            {
+                id: 4,
+                title: "Building Responsive UIs with CSS Grid",
+                excerpt: "Learn how to create modern, responsive layouts using CSS Grid and Flexbox for your web projects.",
+                author: "Sarah Williams",
+                date: "May 28, 2023",
+                tags: ["CSS", "Web Design", "Responsive"],
+                image: "https://images.unsplash.com/photo-1552664730-d307ca884978?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80",
+                category: "tech"
+            },
+            {
+                id: 5,
+                title: "Introduction to Node.js Backend Development",
+                excerpt: "Get started with Node.js and learn how to build scalable backend services for your web applications.",
+                author: "Alex Brown",
+                date: "May 20, 2023",
+                tags: ["Node.js", "Backend", "JavaScript"],
+                image: "https://images.unsplash.com/photo-1542744094-3a31f272c490?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80",
+                category: "tech"
+            },
+            {
+                id: 6,
+                title: "Data Visualization with D3.js",
+                excerpt: "Create beautiful and interactive data visualizations using D3.js library for your web applications.",
+                author: "Emily Chen",
+                date: "May 15, 2023",
+                tags: ["Data Visualization", "D3.js", "JavaScript"],
+                image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80",
+                category: "tech"
+            },
+            {
+                id: 7,
+                title: "Healthy Morning Routines for Productivity",
+                excerpt: "Start your day right with these science-backed morning habits that boost productivity and mental clarity.",
+                author: "Lisa Johnson",
+                date: "June 12, 2023",
+                tags: ["Productivity", "Health", "Lifestyle"],
+                image: "https://images.unsplash.com/photo-1499750310107-5fef28a66643?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80",
+                category: "lifestyle"
+            },
+            {
+                id: 8,
+                title: "Top Travel Destinations for 2023",
+                excerpt: "Discover the most breathtaking locations to add to your travel bucket list this year.",
+                author: "Michael Taylor",
+                date: "June 8, 2023",
+                tags: ["Travel", "Adventure", "Destinations"],
+                image: "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1121&q=80",
+                category: "travel"
+            }
+        ];
+
+        // User's blogs for dashboard
+        const userBlogsData = [
+            {
+                id: 101,
+                title: "My First React Project",
+                excerpt: "A journey through building my first React application and the lessons learned along the way.",
+                date: "June 18, 2023",
+                views: 245,
+                comments: 12,
+                image: "https://images.unsplash.com/photo-1633356122544-f134324a6cee?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80"
+            },
+            {
+                id: 102,
+                title: "Understanding JavaScript Closures",
+                excerpt: "A deep dive into one of JavaScript's most powerful yet misunderstood features.",
+                date: "June 10, 2023",
+                views: 512,
+                comments: 28,
+                image: "https://images.unsplash.com/photo-1627398242454-45a1465c2479?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1174&q=80"
+            }
+        ];
+
+        // Function to render blog posts
+        function renderBlogs(blogs, container) {
+            container.innerHTML = '';
+            blogs.forEach(blog => {
+                const blogCard = document.createElement('div');
+                blogCard.className = 'blog-card fade-in';
+                blogCard.innerHTML = `
+                    <div class="blog-image">
+                        <img src="${blog.image}" alt="${blog.title}">
+                    </div>
+                    <div class="blog-content">
+                        <h3 class="blog-title">${blog.title}</h3>
+                        <p class="blog-excerpt">${blog.excerpt}</p>
+                        <div class="blog-meta">
+                            <span>By ${blog.author}</span>
+                            <span>${blog.date}</span>
+                        </div>
+                        <div class="blog-tags">
+                            ${blog.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+                        </div>
+                        <div class="blog-actions">
+                            <button class="btn btn-outline">Read More</button>
+                            <button class="btn btn-outline"><i class="far fa-heart"></i></button>
+                            <button class="btn btn-outline"><i class="far fa-bookmark"></i></button>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(blogCard);
+            });
+        }
+
+        // Function to render user's blog posts
+        function renderUserBlogs(blogs, container) {
+            container.innerHTML = '';
+            blogs.forEach(blog => {
+                const blogCard = document.createElement('div');
+                blogCard.className = 'blog-card fade-in';
+                blogCard.innerHTML = `
+                    <div class="blog-image">
+                        <img src="${blog.image}" alt="${blog.title}">
+                    </div>
+                    <div class="blog-content">
+                        <h3 class="blog-title">${blog.title}</h3>
+                        <p class="blog-excerpt">${blog.excerpt}</p>
+                        <div class="blog-meta">
+                            <span>${blog.date}</span>
+                            <span><i class="fas fa-eye"></i> ${blog.views}</span>
+                            <span><i class="fas fa-comments"></i> ${blog.comments}</span>
+                        </div>
+                        <div class="blog-actions">
+                            <button class="btn btn-outline">Edit</button>
+                            <button class="btn btn-danger">Delete</button>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(blogCard);
+            });
+        }
+
+        // Function to show a specific page and hide others
+        function showPage(pageId) {
+            // Hide all pages
+            const pages = [
+                mainContent, 
+                discoverPage, 
+                categoriesPage, 
+                aboutPage, 
+                dashboard, 
+                createForm, 
+                loginForm, 
+                signupForm
+            ];
+            
+            pages.forEach(page => {
+                page.classList.add('hidden');
+            });
+            
+            // Show the requested page
+            document.getElementById(pageId).classList.remove('hidden');
+            
+            // Update navigation active state
+            navLinks.forEach(link => {
+                if (link.dataset.page === pageId) {
+                    link.classList.add('active');
+                } else {
+                    link.classList.remove('active');
+                }
+            });
+            
+            // Special handling for home page
+            if (pageId === 'mainContent') {
+                document.querySelector('nav a[data-page="home"]').classList.add('active');
+            }
+        }
+
+        // Event Listeners
+        loginBtn.addEventListener('click', () => showPage('loginForm'));
+        signupBtn.addEventListener('click', () => showPage('signupForm'));
+        createBtn.addEventListener('click', () => showPage('createForm'));
+        heroCreateBtn.addEventListener('click', () => {
+            if (createBtn.classList.contains('hidden')) {
+                showPage('loginForm');
+            } else {
+                showPage('createForm');
+            }
+        });
+        dashboardCreateBtn.addEventListener('click', () => showPage('createForm'));
+        cancelCreate.addEventListener('click', () => showPage('dashboard'));
+        homeBtn.addEventListener('click', () => showPage('mainContent'));
+        showLogin.addEventListener('click', (e) => {
+            e.preventDefault();
+            showPage('loginForm');
+        });
+        showSignup.addEventListener('click', (e) => {
+            e.preventDefault();
+            showPage('signupForm');
+        });
+
+        // Navigation links
+        navLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const page = link.dataset.page;
+                if (page === 'home') {
+                    showPage('mainContent');
+                } else {
+                    showPage(page + 'Page');
+                }
+            });
+        });
+
+        // Footer links
+        footerLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const page = link.dataset.page;
+                if (page === 'home') {
+                    showPage('mainContent');
+                } else {
+                    showPage(page + 'Page');
+                }
+            });
+        });
+
+        // Form submissions
+        loginFormElement.addEventListener('submit', (e) => {
+            e.preventDefault();
+            // Simulate login
+            loginBtn.classList.add('hidden');
+            signupBtn.classList.add('hidden');
+            createBtn.classList.remove('hidden');
+            logoutBtn.classList.remove('hidden');
+            showPage('dashboard');
+        });
+
+        signupFormElement.addEventListener('submit', (e) => {
+            e.preventDefault();
+            // Simulate signup
+            loginBtn.classList.add('hidden');
+            signupBtn.classList.add('hidden');
+            createBtn.classList.remove('hidden');
+            logoutBtn.classList.remove('hidden');
+            showPage('dashboard');
+        });
+
+        blogForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            // Simulate blog creation
+            alert('Blog post published successfully!');
+            showPage('dashboard');
+        });
+
+        logoutBtn.addEventListener('click', () => {
+            // Simulate logout
+            loginBtn.classList.remove('hidden');
+            signupBtn.classList.remove('hidden');
+            createBtn.classList.add('hidden');
+            logoutBtn.classList.add('hidden');
+            showPage('mainContent');
+        });
+
+        // Initialize the page
+        renderBlogs(sampleBlogs, blogList);
+        renderBlogs(sampleBlogs.slice(0, 3), document.querySelector('#discoverPage .blog-list'));
+        renderBlogs(sampleBlogs.filter(blog => blog.category === 'tech'), document.querySelector('#categoriesPage .blog-list'));
+        renderUserBlogs(userBlogsData, userBlogs);
+    </script>
+</body>
+</html>
